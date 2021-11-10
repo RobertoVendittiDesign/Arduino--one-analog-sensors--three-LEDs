@@ -1,0 +1,52 @@
+// Setting up sensor's variables
+
+const int sensorPin = A0;
+int sensorValue;
+int sensorMax= 1023;
+
+// Setting up LEDs
+
+int yellowPin = 6;
+int bluePin = 7;
+int greenPin = 8;
+
+
+
+void setup() 
+{
+  Serial.begin(9600);
+  pinMode(sensorPin, INPUT);
+  for (int pinNumber = 6; pinNumber <9; pinNumber++) {
+    pinMode(pinNumber, OUTPUT);
+  }
+}
+
+void loop() 
+{
+  // Read the ADC
+  int sensorValue = analogRead(sensorPin);
+
+  Serial.print("Sensor value is: ");
+  Serial.println(String(sensorValue));
+  
+  // Compute the different thresholds at which each LEDs lights up
+  
+  if (sensorValue > sensorMax/1.4) {
+    analogWrite(yellowPin, sensorValue/4);
+    digitalWrite(bluePin, LOW); 
+    digitalWrite(greenPin, LOW); 
+  } else if (sensorValue < sensorMax/1.4 && sensorValue > sensorMax/2.5) {
+    digitalWrite(bluePin, HIGH);
+    analogWrite(yellowPin, 0);
+    digitalWrite(greenPin, LOW); 
+} else if (sensorValue < sensorMax/2.5 && sensorValue > sensorMax/10.23 ) {
+    digitalWrite(greenPin, HIGH);
+    analogWrite(yellowPin, 0);
+    digitalWrite(bluePin, LOW); 
+} else if (sensorValue < sensorMax/10.23) {
+    digitalWrite(greenPin, LOW);
+    analogWrite(yellowPin, 0);
+    digitalWrite(bluePin, LOW);
+}
+  
+}
